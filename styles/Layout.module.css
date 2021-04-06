@@ -124,9 +124,12 @@
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1150px) {
   .main{
     padding: 0 10rem;
+  }
+  .form__group{
+    border-color: 1px solid red;
   }
 }
 

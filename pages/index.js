@@ -4,16 +4,24 @@ import * as Helpers from '../utils/helpers'
 import HomeStyle from '../styles/Home.module.css'
 import CardComponent from '../component/Card'
 
+const formData = {
+  lastName: '',
+  documentNumber: '',
+  nickname: '',
+  organization: '',
+  crime: '',
+  modality: '',
+  interventionDate: '',
+  place: '',
+  character: '',
+  signals: '',
+}
+
 export default function Home({ articles }) {
   const [uploadedImages, setUploadedImages] = useState([])
   const [userList, setUserList] = useState([])
-  const [data, setData] = useState({
-    lastName: '',
-    nickname: '',
-    interventionDate: '',
-    crime: '',
-    modality: '',
-  })
+  const [title, setTitle] = useState('')
+  const [data, setData] = useState(formData)
 
   const handleInputChange = (event) => {
     setData({
@@ -24,13 +32,7 @@ export default function Home({ articles }) {
 
   const cleanData = () => {
     setUploadedImages([]);
-    setData({
-      lastName: '',
-      nickname: '',
-      interventionDate: '',
-      crime: '',
-      modality: '',
-    })
+    setData(formData)
   }
 
   const cleanUpUploadedImages = () => {
@@ -49,11 +51,9 @@ export default function Home({ articles }) {
   const addPerson = () => {
     setUserList([
       ...userList || {},
-      { uploadedImages, data }
+      { uploadedImages, data, title }
     ])
     cleanData()
-    // Helpers.generatePdfFromImages({ uploadedImages, data })
-    // cleanUpUploadedImages()
   }
 
   const handleImageUpload = async (event) => {
@@ -72,11 +72,25 @@ export default function Home({ articles }) {
         <meta name="keywords" content="web develpment" />
       </Head>
       <div className="container">
-        <h2>Demo Album</h2>
+        <h2 className="title">Demo Album</h2>
+        <div className="file__content input__border">
+          <span className="form__subtitle">Título</span>
+          <input type="text" placeholder="Complete los datos" name="title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+          />
+        </div>
         <div className="form__group">
           <span className="form__subtitle">Apellidos y Nombres</span>
           <input type="text" placeholder="Complete los datos" name="lastName"
             value={data.lastName}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="form__group">
+          <span className="form__subtitle">DNI</span>
+          <input type="text" placeholder="Complete los datos" name="documentNumber"
+            value={data.documentNumber}
             onChange={handleInputChange}
           />
         </div>
@@ -88,9 +102,9 @@ export default function Home({ articles }) {
           />
         </div>
         <div className="form__group">
-          <span className="form__subtitle">Fecha y Hora de intervención</span>
-          <input type="date" placeholder="Complete los datos" name="interventionDate"
-            value={data.interventionDate}
+          <span className="form__subtitle">Banda</span>
+          <input type="text" placeholder="Complete los datos" name="organization"
+            value={data.organization}
             onChange={handleInputChange}
           />
         </div>
@@ -108,18 +122,47 @@ export default function Home({ articles }) {
             onChange={handleInputChange}
           />
         </div>
-
-        <label htmlFor="file-input">
-          <span className="button form__subtitle">Cargar Imagenes</span>
-          <input
-            id="file-input"
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            // style={{ display: "none" }}
-            multiple
+        <div className="form__group">
+          <span className="form__subtitle">Fecha y Hora de intervención</span>
+          <input type="date" placeholder="Complete los datos" name="interventionDate"
+            value={data.interventionDate}
+            onChange={handleInputChange}
           />
-        </label>
+        </div>
+        <div className="form__group">
+          <span className="form__subtitle">Lugar de los hechos</span>
+          <input type="text" placeholder="Complete los datos" name="place"
+            value={data.place}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="file__content">
+          <span className="form__subtitle">Características físicas</span>
+          <input type="text" placeholder="Complete los datos" name="character"
+            value={data.character}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="file__content">
+          <span className="form__subtitle">Señales particulares</span>
+          <input type="text" placeholder="Complete los datos" name="signals"
+            value={data.signals}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="file__content input__border">
+          <label htmlFor="file-input">
+            <span className="button form__subtitle">Cargar Imagenes</span>
+            <input
+              id="file-input"
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              // style={{ display: "none" }}
+              multiple
+            />
+          </label>
+        </div>
 
 
         <button
@@ -156,15 +199,49 @@ export default function Home({ articles }) {
           .content__list {
             height: 50vh;
             overflow-y: auto;
+            width: 90%; 
           }
           .container {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            flex-wrap: wrap;
           }
           input, button{
-            margin: 10px 0;
+            margin: 5px 0;
             padding: 10px;
             width: 100%;
+          }
+          button {
+            width: 100%;
+            // margin: 5px;
+            margin-right: 10%;
+          }
+          .title {
+            width: 100%;
+          }
+          .file__content{
+            width: 100%;
+            padding: 5px;
+            margin-right: 10%;
+          }
+          .input__border{
+            margin-bottom: 10px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid gray;
+          }
+          .form__group{
+            width: 45%;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+            padding: 5px;
+          }
+
+          @media (max-width: 1150px) {
+            .form__group, .title, .content__list, .file__content, button {
+              width: 100%;
+              margin-right: 0;
+            }
           }
         `}
       </style>
