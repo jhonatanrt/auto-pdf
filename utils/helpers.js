@@ -68,7 +68,7 @@ export const generatePdfFromImages = (userList) => {
 
   userList.forEach(({ uploadedImages: images = [], data, title }, i) => {
     doc.setFontSize(14)
-    let x = 25, y = 35;
+    let x = 25, y = 30;
     // const imageDimensions = imageDimensionsOnA4({
     //   width: image.width,
     //   height: image.height,
@@ -90,42 +90,53 @@ export const generatePdfFromImages = (userList) => {
 
 
     // doc.text(x, 20, `ALBUM FOTOGRAFICO DETENIDOS`)
-    let splitTitle = doc.splitTextToSize(`${title}`, 100);
-    doc.text(splitTitle, A4_PAPER_DIMENSIONS.width / 2, 15, 'center');
+    doc.setFont("helvetica", "bold");
+    let splitTitle = doc.splitTextToSize(`${title.toUpperCase()}`, 100);
+    doc.text(splitTitle, A4_PAPER_DIMENSIONS.width / 2, 10, 'center');
     doc.setFontSize(10)
+    
     body.forEach((item, index) => {
+      doc.setFont("helvetica", "bold");
       doc.text(`${item.name.toUpperCase()}`, x, y)
       doc.text(':', x + 65, y)
-      let splitValue = doc.splitTextToSize(item.value, 80);
+      let splitValue = doc.splitTextToSize(item.value.toUpperCase(), 100);
+      console.log(splitValue)
+      doc.setFont("helvetica", "normal");
       doc.text(splitValue, x + 75, y)
-      y += 9
+      y += (8*splitValue.length)
     })
 
-    x = 35
+    x = 35;
+
 
     images.forEach((image, index) => {
       if (index !== 0 && index % 2 === 0) {
         y += 80;
       }
 
-      const imageDimensions = imageDimensionsOnA4({
-        width: image.width,
-        height: image.height,
-      });
+      // const imageDimensions = imageDimensionsOnA4({
+      //   width: image.width,
+      //   height: image.height,
+      // });
 
-      doc.addImage(
-        image.src,
-        image.imageType,
-        // (A4_PAPER_DIMENSIONS.width - imageDimensions.width) / 2,
-        x + (index % 2 === 0 ? 0 : 80),
-        y,
-        // (A4_PAPER_DIMENSIONS.height - imageDimensions.height) / 2,
-        imageDimensions.width / 4,
-        imageDimensions.height / 4
-      );
+      // doc.addImage(
+      //   image.src,
+      //   image.imageType,
+      //   // (A4_PAPER_DIMENSIONS.width - imageDimensions.width) / 2,
+      //   x + (index % 2 === 0 ? 0 : 80),
+      //   y,
+      //   // (A4_PAPER_DIMENSIONS.height - imageDimensions.height) / 2,
+      //   imageDimensions.width / 4,
+      //   imageDimensions.height / 4
+      // );
+      doc.addImage(image.src, image.imageType, x + (index % 2 === 0 ? 0 : 80), y, 50, 70)
+      if(index === 3){ 
+        y = -50;
+        doc.addPage(); 
+      }
     })
 
-    doc.text('Página ' + String(i + 1) + ' de ' + String(userList.length), 210 - 20, 297 - 10, null, null, "right");
+    // doc.text('Página ' + String(i + 1) + ' de ' + String(userList.length), 210 - 20, 297 - 10, null, null, "right");
   });
 
   const pdfURL = doc.output("bloburl");

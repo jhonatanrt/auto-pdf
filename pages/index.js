@@ -18,9 +18,9 @@ const formData = {
 }
 
 export default function Home({ articles }) {
-  const [uploadedImages, setUploadedImages] = useState([])
+  const [uploadedImages, setUploadedImages] = useState([1,2,3,4])
   const [userList, setUserList] = useState([])
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState('Album Fotográfico de ')
   const [data, setData] = useState(formData)
 
   const handleInputChange = (event) => {
@@ -168,7 +168,7 @@ export default function Home({ articles }) {
         <button
           onClick={addPerson}
           className="button"
-          disabled={uploadedImages.length === 0}
+          // disabled={uploadedImages.length === 0}
         >
           Agregar
         </button>
